@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <%= link_to "Job Listing", root_path, class: "navbar-brand" %>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+      <% if user_signed_in? %>
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link" %>       
+        </li>
+        <li class="nav-item">
+          <%= link_to "Invite a User", new_user_invitation_path, class: "nav-link" %>
+        </li>   
+        
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Settings
+          </a>
+            <ul class="dropdown-menu">
+              <li class="nav-item">
+                <%= link_to "Profile", edit_user_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Logout", destroy_user_session_path, class: "nav-link" %> </li>
+          </ul>
+      </li>
+      <% else %>
+     <li class="nav-item">
+          <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+        </li>   
+      <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
