@@ -1,2 +1,22 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="container">
+  <% if user_signed_in? %>
+  <h1>My Jobs</h1>
+
+    <% if @jobs.present? %>
+      <% @jobs.each do |job| %>
+      <div class="container bg-dark text-white p-4 my-3 rounded">
+        <h5>Job Title: <b><%= job&.title %></b></h5>
+        <h5>Job Description: <b><%= job&.description %></b></h5>
+        <h5>Type of Employment: <b><%= job&.employment_type&.name %></b></h5>
+        <h5>Industry: <b><%= job&.industry&.name %></b></h5>
+      </div>
+      <% end %>
+    <% else %>
+    <h5>No jobs created yet! </h5>
+      <%= link_to "Create a new Job", new_job_path, class: "btn btn-dark btn-outline-light my-3" %>
+    <% end %>
+  <% else %>
+    <h1>Login to Start Posting Jobs</h1>
+    <h3><%= link_to "Login", new_user_session_path, class: "btn btn-dark btn-outline-light" %></h3>
+  <% end %>  
+</div>  

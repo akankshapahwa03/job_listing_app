@@ -1,0 +1,15 @@
+<div class="container">
+  <% if !current_user.admin? %>
+    <h2>Drafts</h2>
+      <% @drafts.each do |job| %>
+        <div class="container-fluid bg-dark text-white p-4 my-3 rounded">
+          <h6>Job Posted By: <b><%= job&.user&.name || "N/A" %></b></h6> 
+          <h6>Job Title: <b><%= job&.title || "N/A" %></b></h2>
+          <h6>Job Description: <b><%= job&.description || "N/A" %></b></h6>
+          <h6>Type of Employment: <b><%= job&.employment_type&.name || "N/A" %></b></h6>
+          <h6>Industry: <b><%= job&.industry&.name || "N/A" %></b></h6>
+          <%= link_to "Publish", edit_job_path(job), class: "btn btn-sm btn-dark btn-outline-light" %>
+        </div>  
+      <% end %>
+  <% end %>
+</div>

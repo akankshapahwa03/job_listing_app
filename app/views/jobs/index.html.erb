@@ -1,0 +1,69 @@
+<div class="container">
+  <h1 class="fw-bold py-3">All Job Listings</h1>
+  <div class="container-fluid">
+    <h2 class="mb-4">Published Jobs</h2>
+    <div class="d-flex justify-content-between align-items-center my-4">
+      <%= form_with url: jobs_path, method: :get, local: true, class: "d-flex align-items-center me-3" do |f| %>
+        <%= f.text_field :search, value: params[:search], placeholder: "Search Jobs", class: "form-control me-2" %>
+        <%= f.submit "Search", class: "btn btn-sm btn-dark" %>
+      <% end %>
+      <div class="d-flex justify-content-between align-items-center">
+      <%= form_with url: jobs_path, method: :get, local: true, class: "d-flex align-items-center me-3" do |f| %>
+        <%= select_tag :employment_type_id, options_for_select([
+          ['Full Time', 'full_time'],
+          ['Part Time', 'part_time'],
+          ['Contract', 'contract']
+        ], params[:employment_type_id]), prompt: "Filter by Employment Type", class: "form-select me-2" %>
+        <%= f.submit "Filter", class: "btn btn-sm btn-dark" %>
+      <% end %>
+
+      <%= form_with url: jobs_path, method: :get, local: true, class: "d-flex align-items-center me-3" do |f| %>
+        <%= select_tag :industry_id, options_for_select([
+          ['Information Technology (IT)', 'information_technology_it'],
+          ['Accounting', 'accounting'],
+          ['Human Resources (HR)', 'human_resources_hr'],
+          ['Healthcare', 'healthcare'],
+          ['Education', 'education']
+        ], params[:industry_id]), prompt: "Filter by Industry", class: "form-select me-2" %>
+        <%= f.submit "Filter", class: "btn btn-sm btn-dark" %>
+      <% end %>
+    </div>
+</div>
+    <% @published_jobs.each do |job| %>
+      <div class="container-fluid bg-dark text-white p-4 my-3 rounded">
+        <h6>Job Posted By: <b><%= job.user.name %></b></h6> 
+        <h6>Job Title: <b><%= job.title %></b></h6>
+        <h6>Job Description: <b><%= job.description %></b></h6>
+        <h6>Type of Employment: <b><%= job.employment_type.name if job.employment_type.present? %></b></h6>
+        <h6>Industry: <b><%= job.industry.name if job.industry.present? %></b></h6>
+        
+        <% if !current_user.admin? %> 
+          <%= form_with url: share_job_path(job), method: :post, local: true, class: "d-flex align-items-center my-2" do |form| %>
+            <%= form.collection_select :user_id, User.where.not(role: :admin).where.not(invitation_accepted_at: nil), :id, :name, { prompt: "Select a user to share job with" }, { class: "form-select w-auto me-2 my-2" } %>
+            <%= form.submit "Share Job", class: "btn btn-dark btn-outline-light" %>
+          <% end %>
+
+          <div class="d-flex justify-content-start align-items-center my-2">
+            <%= link_to "Edit", edit_job_path(job), class: "btn btn-sm btn-dark btn-outline-light me-2" %>
+          
+        <% end %>
+        <%= button_to "Delete", job_path(job), method: :delete, class: "btn btn-sm btn-dark btn-outline-light" %>
+        </div>
+      </div>
+    <% end %>
+            
+
+    <% if !current_user.admin? %> 
+      <% @notifications.each do |notification| %>
+        <div class="container-fluid bg-dark text-white p-4 my-3 rounded">
+          <h6>Job Title: <b><%= notification.job.title %></b></h6>
+          <h6>Job Description: <b><%= notification.job.description %></b></h6>
+          <h6>Type of Employment: <b><%= notification.job.employment_type.name %></b></h6>
+          <h6>Industry: <b><%= notification.job.industry.name %></b></h6>
+          <h6>Job Shared By: <b><%= notification.job.user.name %></b></h6>
+        </div>
+      <% end %>
+      <%= link_to "Add a new Job", new_job_path, class: "btn btn-dark btn-outline-light" %>
+    <% end %> 
+  </div>
+</div>
