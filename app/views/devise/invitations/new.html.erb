@@ -1,20 +1,30 @@
+<div class="container-fluid py-3">
 <h2><%= t "devise.invitations.new.header" %></h2>
 
 <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
   <% resource.class.invite_key_fields.each do |field| -%>
-    <div class="field">
-      <%= f.label field %><br />
-      <%= f.text_field field %>
+    <div class="field py-3 w-50">
+      <%= f.label field %>
+      <%= f.text_field field, class: "form-control" %>
     </div>
   <% end %>
+<div class="field py-2 w-50">
+    <%= f.label :image %>
+    <%= f.file_field :image, class: "form-control", :required => true %>
+  </div>
 
-  <div class="field">
+  <div class="field py-2 w-50">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+  <div class="field py-3 w-25">
     <%= f.label :role %>
-    <%= f.select :role, options_for_select(User.roles.map { |key, value| [key.humanize, key] }), {prompt: "Select Role"} %>
+    <%= f.select :role, options_for_select(User.roles.map { |key, value| [key.humanize, key] }), {prompt: "Select Role"}, :required => true %>
   </div>
 
   <div class="actions">
-    <%= f.submit t("devise.invitations.new.submit_button") %>
+    <%= f.submit t("devise.invitations.new.submit_button"), class: "btn btn-dark btn-outline-light" %>
   </div>
 <% end %>
+</div>

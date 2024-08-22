@@ -1,27 +1,42 @@
+<div class="container-fluid py-3">
+
 <h2><%= t "devise.invitations.edit.header" %></h2>
 
 <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
   <%= f.hidden_field :invitation_token, readonly: true %>
 
+  <% resource.class.invite_key_fields.each do |field| -%>
+    <div class="field py-3 w-50">
+      <%= f.label field %>
+      <%= f.text_field field, class: "form-control", disabled: true %>
+    </div>
+  <% end %>
   <div class="field">
+    <%= f.label :profile_picture, "Change Profile Picture" %><br />
+    <%= f.file_field :profile_picture, class: "form-control" %>
+    <p>Upload a new profile picture if you want to change it.</p>
+  </div>
+
+  <div class="field py-2 w-50">
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, class: "form-control" %>
   </div>
   
   <% if f.object.class.require_password_on_accepting %>
-    <div class="field">
-      <%= f.label :password %><br />
-      <%= f.password_field :password %>
+    <div class="field py-2 w-50">
+      <%= f.label :password %>
+      <%= f.password_field :password, class: "form-control" %>
     </div>
 
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation %>
+    <div class="field py-2 w-50">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, class: "form-control" %>
     </div>
   <% end %>
 
-  <div class="actions">
-    <%= f.submit t("devise.invitations.edit.submit_button") %>
+  <div class="actions py-2 w-50">
+    <%= f.submit t("devise.invitations.edit.submit_button"), class: "btn btn-dark btn-outline-light" %>
   </div>
 <% end %>
+</div>

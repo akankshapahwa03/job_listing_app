@@ -1,0 +1,54 @@
+<div class="container">
+  <h1 class="fw-bold my-3">All Users</h1>
+  <div class="container-fluid">
+
+    <!-- Search and Filters Combined -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <!-- Search Form -->
+      <%= form_with url: dashboard_path, method: :get, local: true, class: "d-flex align-items-center me-3" do |f| %>
+        <%= f.text_field :search, value: params[:search], placeholder: "Search Users", class: "form-control me-2" %>
+        <%= f.submit "Search", class: "btn btn-sm btn-dark btn-outline-light" %>
+      <% end %>
+
+      <!-- Filters Combined -->
+      <div class="d-flex align-items-center">
+        <%= form_with url: dashboard_path, method: :get, local: true, class: "d-flex align-items-center me-3" do |f| %>
+          <%= select_tag :role, options_for_select([
+            ['Admin', 'admin'],
+            ['Member', 'member']
+          ], params[:role]), prompt: "Filter by role", class: "form-select me-2" %>
+          <%= f.submit "Filter", class: "btn btn-sm btn-dark btn-outline-light" %>
+        <% end %>
+
+        <%= form_with url: dashboard_path, method: :get, local: true, class: "d-flex align-items-center" do |f| %>
+          <%= select_tag :created_at, options_for_select([
+            ['Today', 'today'],
+            ['Yesterday', 'yesterday'],
+            ['Last Week', 'last_week'],
+            ['Last Month', 'last_month'],
+            ['Last 3 Months', 'last_3_months']
+          ], params[:created_at]), prompt: "Filter by creation date", class: "form-select me-2" %>
+          <%= f.submit "Filter", class: "btn btn-sm btn-dark btn-outline-light" %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Users List -->
+    <% @users.each do |user| %>
+      <div class="container-fluid bg-dark text-white p-4 my-2 rounded">
+        <div class="my-2">
+          <%= image_tag(user.display_image, style: "border-radius: 50%; width: 60px; height: 60px;") if user.image.attached? %> 
+        </div>
+        <% if user.invitation_accepted_at.nil? && user.member? %>
+          <b><h4>Invite Sent</h4></b>
+        <% else %>
+          <h6>User Name: <b><%= user.name %></b></h6>
+        <% end %>
+        <h6>User Email: <b><%= user.email %></b></h6>
+        <h6>User Role: <b><%= user.role %></b></h6>
+        <%= button_to "Delete", user_path(user), method: :delete, class: "btn btn-sm btn-dark btn-outline-light"  %>
+      </div>
+    <% end %>
+
+  </div>
+</div>
