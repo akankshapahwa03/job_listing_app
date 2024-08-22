@@ -33,6 +33,7 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  config.active_storage.variant_processor = :mini_magick
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
@@ -75,4 +76,14 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
   
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'localhost',
+    user_name: Rails.application.credentials.gmail[:user_name],
+    password: Rails.application.credentials.gmail[:password],
+    authentication: 'plain',
+    enable_starttls_auto: true
+  } 
 end
