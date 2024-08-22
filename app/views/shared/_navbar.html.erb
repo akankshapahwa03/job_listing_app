@@ -1,26 +1,64 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <%= link_to "Job Listing", root_path, class: "navbar-brand" %>
+  <div class="container d-flex justify-content-between">
+    <div>
+      <%= link_to "Job Listing", root_path, class: "navbar-brand" %>
+    </div>
+  <div>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
       <% if user_signed_in? %>
-        <li class="nav-item">
-          <%= link_to "Home", root_path, class: "nav-link" %>       
-        </li>
-        <li class="nav-item">
-          <%= link_to "Invite a User", new_user_invitation_path, class: "nav-link" %>
-        </li>   
+        <% if !current_user.admin? %>
+          <li class="nav-item">
+            <div class="notification-bell nav-link">
+              <%= link_to "#", id: 'notification-bell-link', class: 'dropdown-toggle nav-link p-0' do %>
+                <span class="icon-bell">
+                  <i class="fa fa-bell"></i>
+                </span>
+                <span class="notification-count" id="notification-count">
+                  <%= current_user.notifications.unread.count %>
+                </span>
+              <% end %>
+
+              <div class="dropdown-menu" id="notification-dropdown" style="display: none; right: 25px;">
+                <% current_user.notifications.each do |notification| %>
+                  <div class="notification-item" data-id="<%= notification.id %>">
+                    <a href="<%= job_path(notification.job_id) %>" class="nav-link " style="font-weight: <%= notification.read? ? 'normal' : 'bold' %>;">
+                      <%= notification.message %>
+                    </a>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Drafts", draft_jobs_path, class: "nav-link" %>       
+          </li>
+        <% end %>
         
+        <li class="nav-item">
+          <%= link_to "Home", jobs_path, class: "nav-link" %>       
+        </li>
+
+
+        <% if current_user.admin? %>
+          <li class="nav-item">
+            <%= link_to "Invite a User", new_user_invitation_path, class: "nav-link" %>
+          </li>   
+          <li class="nav-item">
+            <%= link_to "Admin Dashboard", dashboard_path, class: "nav-link" %>
+          </li>
+        <% end %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Settings
           </a>
             <ul class="dropdown-menu">
               <li class="nav-item">
-                <%= link_to "Profile", edit_user_path, class: "nav-link" %>
+                <%= link_to "Profile", user_path(current_user), class: "nav-link" %>
               </li>
               <li class="nav-item">
-                <%= link_to "Logout", destroy_user_session_path, class: "nav-link" %> </li>
+                <%= button_to "Logout", destroy_user_session_path,method: :delete, data: { turbo: false }, class: "nav-link" %> 
+              </li>
           </ul>
       </li>
       <% else %>
@@ -29,6 +67,13 @@
         </li>   
       <% end %>
       </ul>
+      </div>
     </div>
   </div>
 </nav>
+
+
+
+
+
+
