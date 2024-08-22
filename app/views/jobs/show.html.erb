@@ -1,0 +1,16 @@
+<div class="container-fluid p-4">
+  <h4>Job Posted By: <%= @job.user.name %></h4> 
+  <h4>Job Title: <%= @job.title %></h2>
+  <h4>Job Description: <%= @job.description %></h4>
+  <h4>Type of Employment: <%= @job.employment_type.name if @job.employment_type.present? %></h4>
+  <h4>Industry: <%= @job.industry.name if @job.industry.present? %></h4>
+  <% if current_user.id == @job.user_id && !current_user.admin? %>
+    <%= form_with url: share_job_path(@job), method: :post, local: true do |form| %>
+      <%= form.label :user_id, "Share with:" %>
+      <%= form.collection_select :user_id, User.where.not(role: :admin).where.not(invitation_accepted_at: nil), :id, :name, prompt: "Select a user" %>
+      <%= form.submit "Share Job", class: "btn btn-sm btn-dark btn-outline-light" %>
+    <% end %>
+    <%= link_to "Edit", edit_job_path, class: "btn btn-sm btn-dark my-3 btn-outline-light" %>
+  <% end %>
+  <%= link_to "Back", jobs_path, class: "btn btn-sm btn-dark my-2 btn-outline-light" %> 
+</div>

@@ -1,0 +1,18 @@
+<div class="container-fluid py-3">
+  <h2>Verify OTP</h2>
+  <%= form_with url: users_verify_otp_path, method: :post, local: true do |f| %>
+    <%= f.hidden_field :email, value: params[:email] %>
+    <div class="py-3 w-25">
+      <%= f.label :otp, "Enter OTP" %>
+      <%= f.text_field :otp, class: "form-control" %>
+    </div>
+    <%= f.submit "Verify OTP", class: "btn btn-dark" %>
+  <% end %>
+
+  <%= form_with url: users_resend_otp_path, method: :post, local: true do |f| %>
+    <%= f.hidden_field :email, value: params[:email] %>
+    <div class="py-3 w-25">
+      <%= f.submit "Resend OTP", class: "btn btn-dark" %>
+    </div>
+  <% end %>
+</div>
