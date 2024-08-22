@@ -18,7 +18,7 @@ gem "puma", ">= 5.0"
 gem "importmap-rails"
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
+# gem "turbo-rails"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
@@ -70,3 +70,11 @@ gem "devise", "~> 4.9"
 gem 'devise_invitable', '~> 2.0.0'
 gem 'jsbundling-rails'
 gem 'cssbundling-rails'
+gem 'active_storage_validations'
+gem 'mini_magick', '~> 4.12'
+gem 'image_processing', '~> 1.12', '>= 1.12.2'
+gem 'byebug', '~> 11.1', '>= 11.1.3'
+gem 'sidekiq'
+gem 'sunspot_solr', '~> 2.7', '>= 2.7.1' 
+gem 'sunspot_rails', '~> 2.7', '>= 2.7.1'
+gem 'progress_bar'
